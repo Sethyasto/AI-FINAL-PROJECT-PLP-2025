@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JubileeCare Advisor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/universal-translator@1.0.5/dist/translator.min.js"></script>
+</head>
+<body>
+    <div class="accessibility-toolbar">
+        <button id="dark-mode-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+        <div class="text-size-controls">
+            <button id="decrease-text" aria-label="Decrease text size">A-</button>
+            <button id="reset-text" aria-label="Reset text size">A</button>
+            <button id="increase-text" aria-label="Increase text size">A+</button>
+        </div>
+        <button id="screen-reader-toggle" aria-label="Toggle screen reader mode">
+            <i class="fas fa-assistive-listening-systems"></i>
+        </button>
+    </div>
+    
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+           
+            <div class="header-text">
+                <h2>JubileeCare Advisor</h2>
+                <p>Your personal health insurance guide</p>
+            </div>
+            <div class="header-controls">
+                <div class="language-selector">
+                    <select id="language-select" aria-label="Select language">
+                        <option value="en">English</option>
+                        <option value="sw">Swahili</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="ar">Arabic</option>
+                    </select>
+                </div>
+                <button id="clear-chat" aria-label="Clear chat history">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="chatbot-body" id="chatbot-body">
+            <div class="welcome-message">
+                <p>👋 Hello! I'm Julie, your JubileeCare Advisor. I'm here to help you understand our health insurance plans and find the best coverage for your needs.</p>
+                <p>How can I assist you today?</p>
+                <div class="quick-options">
+                    <button class="quick-btn" data-option="plans">📋 View Insurance Plans</button>
+                    <button class="quick-btn" data-option="calculator">💰 Premium Calculator</button>
+                    <button class="quick-btn" data-option="benefits">🛡️ Learn About Benefits</button>
+                    <button class="quick-btn" data-option="saved">💾 My Saved Quotes</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-footer">
+            <div class="suggestions-container" id="suggestions-container">
+                <!-- Suggested questions will appear here -->
+            </div>
+            <div class="input-container">
+                <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off" aria-label="Type your message">
+                <button id="send-btn" aria-label="Send message"><i class="fas fa-paper-plane"></i></button>
+                <button id="voice-btn" aria-label="Voice input"><i class="fas fa-microphone"></i></button>
+                <button id="read-aloud-btn" aria-label="Read last message"><i class="fas fa-volume-up"></i></button>
+            </div>
+            <div class="disclaimer">
+                <p>JubileeCare Advisor provides general information. For specific policy details, please consult official documents or contact Jubilee Health Insurance directly.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for insurance plans -->
+    <div id="plans-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Insurance Plans</h3>
+            <div class="plans-list"></div>
+            <div class="plan-details"></div>
+            <button id="compare-plans-btn" class="action-btn">Compare Selected Plans</button>
+        </div>
+    </div>
+
+     <!-- Modal for application -->
+    <div id="application-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Application Process</h3>
+        <div class="application-steps"></div>
+    </div>
+</div>
+
+<!-- Modal based on needs -->
+    <div id="needs-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Insurance Needs Assessment</h3>
+            <div class="needs-assessment">
+                <p>Based on your profile, we recommend the following plans:</p>
+                <div class="recommended-plans"></div>
+                <button id="apply-now-btn" class="action-btn">Apply Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for document requirements -->
+<div id="documents-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Document Requirements</h3>
+        <div class="documents-list"></div>
+    </div>
+</div>
+
+    <!-- Modal for plan comparison -->
+    <div id="comparison-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Compare Insurance Plans</h3>
+            <div class="comparison-tools">
+                <div class="plan-selector">
+                    <label>Select Plans to Compare:</label>
+                    <div class="plan-checkboxes"></div>
+                </div>
+                <div class="comparison-view">
+                    <div class="comparison-table"></div>
+                    <div class="comparison-charts">
+                        <canvas id="coverage-chart"></canvas>
+                        <canvas id="premium-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="match-score">
+                <h4>Your Plan Match Score</h4>
+                <div class="score-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for saved quotes -->
+    <div id="saved-quotes-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>My Saved Quotes</h3>
+            <div class="saved-quotes-list"></div>
+        </div>
+    </div>
+
+    <!-- Modal for claims assistance -->
+    <div id="claims-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Claims Assistance</h3>
+            <div class="claims-process">
+                <div class="claims-steps"></div>
+                <div class="claims-form-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
