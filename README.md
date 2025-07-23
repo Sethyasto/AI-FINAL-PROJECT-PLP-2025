@@ -1,4 +1,7 @@
 # AI-FINAL-PROJECT-PLP-2025
+PITCH DECK LINK:
+https://www.canva.com/design/DAGuArrpxdg/XXVRayQrZl5lbP3m33kBJg/edit?utm_content=DAGuArrpxdg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 # JubileeCare Advisor 🛡️
 
 An intelligent health insurance chatbot designed to assist users in understanding and choosing Jubilee Health Insurance plans. JubileeCare Advisor provides multilingual support, premium calculations, plan comparisons, document guidance, and accessible features — all in a clean and interactive interface.
